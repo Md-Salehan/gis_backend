@@ -48,6 +48,8 @@ class WgtGdPortalLayerMap(models.Model):
     label_view_zoom_level = models.DecimalField(max_digits=2, decimal_places=0, blank=True, null=True)
     override_style_flg = models.CharField(max_length=1, default='N')
     layer_sld_xml_code = models.CharField(max_length=4000, blank=True, null=True)
+    default_view_flg = models.CharField(max_length=1, default='N')
+    layer_order_no = models.DecimalField(max_digits=2, decimal_places=0, default=0)
     act_flg = models.CharField(max_length=1, default='A')
     mod_dt = models.DateTimeField()
 

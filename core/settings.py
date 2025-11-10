@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-q+p_a*tf@4r8ky*))t_wu%6-fooe=x0^k#r1e&qdxw0g8+#g30
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -62,10 +64,10 @@ MIDDLEWARE = [
 ]
 
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Vite's default development server
-]
-
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",  # Vite's default development server
+# ]
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 # CORS_ALLOW_METHODS = [
