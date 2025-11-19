@@ -122,11 +122,11 @@ class CustomLoginView(APIView):
         #     return Response({"statusCode": "401", "statusMessage": "Invalid credentials"}, status=401)
 
         # 2.2 Check expiry date
-        today = timezone.now().date()
-        if user.exp_dt and user.exp_dt < today:
-            attempt.fail_rson = "User expired"
-            attempt.save()
-            return Response({"statusCode": "403", "statusMessage": "User expired"}, status=403)
+        # today = timezone.now().date()
+        # if user.exp_dt and user.exp_dt < today:
+        #     attempt.fail_rson = "User expired"
+        #     attempt.save()
+        #     return Response({"statusCode": "403", "statusMessage": "User expired"}, status=403)
 
         # 2.3 Check active flags
         if user.login_flg != "0" or user.act_flg != "A":
