@@ -42,6 +42,9 @@ class LegendAPIView(APIView):
         layers = WgtGdLayerMst.objects.filter(layer_id__in=filtered_layer_ids)
         layer_map = {l.layer_id: l for l in layers}
 
+        # Fetch styles and create default style mapping
+        styles = WgtGdGeomStyleMst.objects.filter(act_flg='A')
+        default_styles = {s.geom_typ: s for s in styles}
         
         # Extract all style_ids from portal_layer_maps and fetch them
         style_ids = [plm.style_id for plm in portal_layer_maps if plm.style_id]
@@ -61,6 +64,8 @@ class LegendAPIView(APIView):
             if portal_map and portal_map.style_id:
                 style_obj = style_map.get(portal_map.style_id)
             
+            if not style_obj:
+                style_obj = default_styles.get(layer.layer_geom_typ)
 
             # Build style dictionary
             style = {
@@ -77,17 +82,33 @@ class LegendAPIView(APIView):
             } if style_obj else {}
 
             # Build layer entry
+            # layer_entry = {
+            #     "layerId": lid,
+            #     "name": layer.layer_nm,
+            #     "description": layer.obj_nm or "",
+            #     "type": "categorical",
+            #     "visible": True,
+            #     "metadata": {
+            #         "dateUpdated": layer.mod_dt.strftime("%Y-%m-%d") if getattr(layer, "mod_dt", None) else None,
+            #     },
+            #     "symbols": [{
+            #         "label": layer.layer_nm,
+            #         "value": lid,
+            #         "geom_type": layer.layer_geom_typ,
+            #         "style": style
+            #     }]
+            # }
+
             layer_entry = {
-                "layer_id": lid,
-                "layer_nm": layer.layer_nm,
-                "type": "categorical",
-                "symbols": [{
                     "label": layer.layer_nm,
+                    "value": lid,
                     "geom_type": layer.layer_geom_typ,
                     "style": style
-                }]
-            }
+                }
 
+            # Remove None values from metadata
+            layer_entry["metadata"] = {k: v for k, v in layer_entry["metadata"].items() if v is not None}
+            
             legend_layers.append(layer_entry)
 
         return Response({

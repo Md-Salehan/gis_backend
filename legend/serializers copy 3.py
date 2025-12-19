@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
 class LegendRequestSerializer(serializers.Serializer):
-    portal_id = serializers.CharField()
     layer_ids = serializers.ListField(child=serializers.CharField(), allow_empty=False)
-    # options = serializers.JSONField(required=False)
+    options = serializers.JSONField(required=False)

@@ -153,7 +153,7 @@ class CustomLoginView(APIView):
             user_dt=now,
             ip_addr=ip_addr,
             user_id=user_id,
-            sys_dt=today,
+            # sys_dt=today,
             mod_id="M0002",
             logout_flg="N",
             login_dt=now,
