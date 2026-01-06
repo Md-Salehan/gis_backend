@@ -3,7 +3,7 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
 
 # Import models
-from .models import WgtGdLayerMst, WgtGdPortalLayerMap, Feature
+from .models import WgtGdLayerMst, WgtGdPortalLayerMap
 
 
 
@@ -32,8 +32,3 @@ class PortalLayersRequestSerializer(serializers.Serializer):
 
 
 
-class FeatureSerializer(GeoFeatureModelSerializer):
-    class Meta:
-        model = Feature
-        geo_field = 'geometry'
-        fields = ('id', 'name', 'description')

@@ -54,14 +54,7 @@ def encrypt_password(plain_text):
     return base64.b64encode(encrypted).decode('utf-8')
 
 
-def check_password(input_password, db_password):
-    """
-    Hash input password and compare with DB password.
-    """
-    # Example: SHA256 + Base64
-    hashed = hashlib.sha256(input_password.encode('utf-8')).digest()
-    hashed_b64 = base64.b64encode(hashed).decode()
-    return hashed_b64 == db_password
+
 
 
 def generate_sequential_no(model, field_name):
@@ -116,17 +109,14 @@ class CustomLoginView(APIView):
             attempt.fail_rson = "Wrong password"
             attempt.save()
             return Response({"statusCode": "401", "statusMessage": "Invalid credentials"}, status=401)
-        # if not check_password(password, user.user_pwd):
-        #     attempt.fail_rson = "Wrong password"
-        #     attempt.save()
-        #     return Response({"statusCode": "401", "statusMessage": "Invalid credentials"}, status=401)
+
 
         # 2.2 Check expiry date
-        # today = timezone.now().date()
-        # if user.exp_dt and user.exp_dt < today:
-        #     attempt.fail_rson = "User expired"
-        #     attempt.save()
-        #     return Response({"statusCode": "403", "statusMessage": "User expired"}, status=403)
+        today = timezone.now().date()
+        if user.exp_dt and user.exp_dt < today:
+            attempt.fail_rson = "User expired"
+            attempt.save()
+            return Response({"statusCode": "403", "statusMessage": "User expired"}, status=403)
 
         # 2.3 Check active flags
         if user.login_flg != "0" or user.act_flg != "A":
@@ -168,7 +158,7 @@ class CustomLoginView(APIView):
         payload = {
             "user_id": user.user_id,
             "id": user.user_id,  # <-- Add this line!
-            "exp": datetime.utcnow() + timedelta(hours=2),  # Token expires in 2 hours
+            "exp": datetime.utcnow() + timedelta(hours=50),  # Token expires in 50 hours
             "iat": datetime.utcnow(),
         }
         token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
@@ -184,6 +174,7 @@ class CustomLoginView(APIView):
                 "ipAddress": ip_addr,
                 "appLogNo": app_log_no,
                 "access": token if isinstance(token, str) else token.decode('utf-8'),  # PyJWT v2 returns str, v1 returns bytes
+                "appLogNo": app_log_no
             }
         }, status=200)
     

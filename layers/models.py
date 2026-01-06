@@ -67,10 +67,3 @@ class WgtGdPortalLayerMap(models.Model):
 
 
 
-class Feature(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
-    geometry = models.GeometryField(srid=4326, null=True, blank=True)
-
-    def __str__(self):
-        return self.name

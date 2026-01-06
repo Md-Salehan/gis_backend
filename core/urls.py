@@ -24,6 +24,7 @@ urlpatterns = [
     path('api/layers/', include('layers.urls')),
     path('api/object/', include('object.urls')),
     path('api/legend/', include('legend.urls')),
+    path('api/print/', include('printmap.urls')),
 
 ]
 

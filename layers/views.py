@@ -6,12 +6,12 @@ from rest_framework import status
 from rest_framework import viewsets
 
 # Import models
-from .models import WgtGdLayerMst, WgtGdPortalLayerMap, Feature
+from .models import WgtGdLayerMst, WgtGdPortalLayerMap
 from portal.models import WgtGdPortalMst
 from geomStyle.models import WgtGdGeomStyleMst
 
 # Import serializers
-from .serializers import LayerMstSerializer, PortalLayersRequestSerializer, PortalLayerMapSerializer, FeatureSerializer
+from .serializers import LayerMstSerializer, PortalLayersRequestSerializer, PortalLayerMapSerializer
 from portal.serializers import PortalSerializer
 from geomStyle.serializers import GeomStyleMstSerializer
 
@@ -106,7 +106,3 @@ class PortalLayersListView(APIView):
 
 
 
-
-class FeatureViewSet(viewsets.ModelViewSet):
-    queryset = Feature.objects.all()
-    serializer_class = FeatureSerializer

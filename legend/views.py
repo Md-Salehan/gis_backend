@@ -35,7 +35,7 @@ class LegendAPIView(APIView):
         )
         
         # Extract layer_ids and style_ids from portal_layer_maps
-        portal_map_dict = {plm.layer_id: plm for plm in portal_layer_maps}
+        portal_map = {plm.layer_id: plm for plm in portal_layer_maps}
         filtered_layer_ids = [plm.layer_id for plm in portal_layer_maps]
         
         # Fetch layers based on filtered layer_ids
@@ -55,11 +55,11 @@ class LegendAPIView(APIView):
                 continue
 
             # Get style for layer from portal_layer_maps
-            portal_map = portal_map_dict.get(lid)
+            portal_map_row = portal_map.get(lid)
             style_obj = None
-            
-            if portal_map and portal_map.style_id:
-                style_obj = style_map.get(portal_map.style_id)
+
+            if portal_map_row and portal_map_row.style_id:
+                style_obj = style_map.get(portal_map_row.style_id)
             
 
             # Build style dictionary
@@ -73,7 +73,8 @@ class LegendAPIView(APIView):
                 "marker_fa_icon_name": getattr(style_obj, "marker_fa_icon_name", None),
                 "marker_color": getattr(style_obj, "marker_color", None),
                 "marker_size": float(getattr(style_obj, "marker_size", 0) or 0),
-                "marker_symbol": getattr(style_obj, "marker_symbol", None)
+                "marker_symbol": getattr(style_obj, "marker_symbol", None),
+                "marker_color": getattr(style_obj, "marker_color", None),
             } if style_obj else {}
 
             # Build layer entry
@@ -83,8 +84,9 @@ class LegendAPIView(APIView):
                 "type": "categorical",
                 "symbols": [{
                     "label": layer.layer_nm,
+                    "layer_order_no": portal_map_row.layer_order_no,
                     "geom_type": layer.layer_geom_typ,
-                    "style": style
+                    "style": style,
                 }]
             }
 
