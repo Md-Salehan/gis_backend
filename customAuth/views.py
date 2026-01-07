@@ -174,7 +174,6 @@ class CustomLoginView(APIView):
                 "ipAddress": ip_addr,
                 "appLogNo": app_log_no,
                 "access": token if isinstance(token, str) else token.decode('utf-8'),  # PyJWT v2 returns str, v1 returns bytes
-                "appLogNo": app_log_no
             }
         }, status=200)
     
