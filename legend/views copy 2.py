@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from object.models import WgtGdObjMst
+from object_app.models import WgtGdObjMst
 from layers.models import WgtGdLayerMst, WgtGdPortalLayerMap
 from geomStyle.models import WgtGdGeomStyleMst
 

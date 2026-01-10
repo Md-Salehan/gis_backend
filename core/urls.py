@@ -22,9 +22,8 @@ urlpatterns = [
     path('api/auth/', include('customAuth.urls')),
     path('api/portal/', include('portal.urls')),
     path('api/layers/', include('layers.urls')),
-    path('api/object/', include('object.urls')),
+    path('api/object/', include('object_app.urls')),
     path('api/legend/', include('legend.urls')),
-    path('api/print/', include('printmap.urls')),
 
 ]
 

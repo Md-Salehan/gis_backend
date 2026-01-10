@@ -47,10 +47,9 @@ INSTALLED_APPS = [
     'customAuth',  # Your custom auth app
     'portal',  # Your custom portal app
     'layers',  # Your custom layers app
-    'object',  # Your custom object app
+    'object_app',  # Your custom object app
     'geomStyle',  # Your custom geomStyle app
     'legend',  # Your custom legend 
-    'printmap',  # Your custom printmap app
 ]
 
 MIDDLEWARE = [
