@@ -18,7 +18,7 @@ from rest_framework.views import APIView
 # from rest_framework_simplejwt.tokens import RefreshToken
 from django.db import transaction
 from .models import SutUserMst, SutLoginAttmptLog, SutAppUserLog, SutUserLocMap
-from .serializers import LoginSerializer
+from .serializers import LoginSerializer, LogoutSerializer
 
 # import hashlib
 # import base64
@@ -177,3 +177,49 @@ class CustomLoginView(APIView):
             }
         }, status=200)
     
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticatedCustom]
+
+    def post(self, request):
+        serializer = LogoutSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response({
+                "statusCode": "400",
+                "statusMessage": "Invalid payload",
+                "errorInfoList": serializer.errors
+            }, status=400)
+
+        app_log_no = serializer.validated_data["appLogNo"]
+
+        try:
+            app_log = SutAppUserLog.objects.get(app_log_no=app_log_no)
+        except SutAppUserLog.DoesNotExist:
+            return Response({
+                "statusCode": "404",
+                "statusMessage": "appLogNo not found"
+            }, status=404)
+
+        # Set logout flag and timestamp as requested
+        app_log.logout_flg = "N"
+        app_log.logout_dt = timezone.now()
+        app_log.save(update_fields=["logout_flg", "logout_dt"])
+
+        return Response({
+            "msg": "Successful operation",
+            "code": 0,
+            "appMsgList": {
+                "errorStatus": False,
+                "list": [
+                    {
+                        "errCd": "CMAI000015",
+                        "errDesc": "Successfully",
+                        "errType": "AI"
+                    }
+                ]
+            }
+        }, status=200)
+
+        # return Response({
+        #     "statusCode": "200",
+        #     "statusMessage": "Logout successful"
+        # }, status=200)
